@@ -1,5 +1,6 @@
 package api;
 
+//Interface da api verbos
 public interface ApiVerbos {
 
     void GET();

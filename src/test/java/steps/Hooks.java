@@ -8,17 +8,18 @@ import utils.ScenarioUtils;
 
 import java.util.HashMap;
 
+// Classe que faz a inicialização e Finalização dos testes automatizados
 public class Hooks extends ApiUtils {
 
     @Before
-    public void Before(Scenario scenario){
+    public void Before(Scenario scenario) {
         ScenarioUtils.add(scenario);
-        hearders = new HashMap<>();
+        headers = new HashMap<>();
         params = new HashMap<>();
     }
 
     @After
-    public  void after(){
+    public void after() {
         ScenarioUtils.remove();
     }
 }

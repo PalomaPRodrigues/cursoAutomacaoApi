@@ -9,9 +9,9 @@ public class ScenarioUtils {
 
     private static Map<Long, Scenario> repository = new HashMap<>();
 
-    public static void add(Scenario scenario){
-        if(get() == null)
-            repository.put(getId(),scenario);
+    public static void add(Scenario scenario) {
+        if (get() == null)
+            repository.put(getId(), scenario);
     }
 
     public static void remove() {
@@ -20,12 +20,14 @@ public class ScenarioUtils {
     }
 
     public static Scenario get() {
-        return  repository.get(getId());
+        return repository.get(getId());
     }
 
-    public static Long getId() {return Thread.currentThread().getId();}
+    public static Long getId() {
+        return Thread.currentThread().getId();
+    }
 
-    public static void addText(String texto){
+    public static void addText(String texto) {
         get().log(texto);
     }
 

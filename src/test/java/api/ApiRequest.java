@@ -1,7 +1,10 @@
 package api;
 
+import io.restassured.specification.RequestSpecification;
+
 import static io.restassured.RestAssured.given;
 
+//metodo das chamadas de requisição da api verbos, que na qual herdar os atributos da classe ApiUtils
 public class ApiRequest extends ApiUtils implements ApiVerbos {
 
     @Override
@@ -9,21 +12,22 @@ public class ApiRequest extends ApiUtils implements ApiVerbos {
         response = given()
                 .relaxedHTTPSValidation()
                 .params(params)
-                .headers(hearders)
+                .headers(headers)
                 .get(uri);
-        super.log( "Get");
+        super.log("Get");
     }
 
     @Override
     public void POST() {
+        //response é responsavel por setar o valor
         response = given()
                 .relaxedHTTPSValidation()
                 .params(params)
-                .headers(hearders)
+                .headers(headers)
                 .body(body.toString())
                 .post(uri);
 
-        super.log( "POST");
+        super.log("POST");
 
 
     }
@@ -33,11 +37,11 @@ public class ApiRequest extends ApiUtils implements ApiVerbos {
         response = given()
                 .relaxedHTTPSValidation()
                 .params(params)
-                .headers(hearders)
+                .headers(headers)
                 .body(body.toString())
                 .put(uri);
 
-        super.log( "PUT");
+        super.log("PUT");
 
     }
 
@@ -46,11 +50,11 @@ public class ApiRequest extends ApiUtils implements ApiVerbos {
         response = given()
                 .relaxedHTTPSValidation()
                 .params(params)
-                .headers(hearders)
+                .headers(headers)
                 .body(body.toString())
                 .patch(uri);
 
-        super.log( "PATCH");
+        super.log("PATCH");
 
     }
 
@@ -59,10 +63,10 @@ public class ApiRequest extends ApiUtils implements ApiVerbos {
         response = given()
                 .relaxedHTTPSValidation()
                 .params(params)
-                .headers(hearders)
+                .headers(headers)
                 .delete(uri);
 
-        super.log( "DELETE");
+        super.log("DELETE");
 
     }
 }
