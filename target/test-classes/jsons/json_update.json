@@ -16,6 +16,7 @@
       "description": "overcast clouds",
       "icon": "04n"
     }
+    ],
   "base": "stations",
   "main": {
     "temp": 283.54,

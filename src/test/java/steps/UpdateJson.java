@@ -12,8 +12,10 @@ public class UpdateJson {
     JsonUtils jsonUtils = new JsonUtils();
 
     @Test
-    public void update() throws IOException, JSONException {
+    public void updateJson() throws Exception {
         JSONObject js = jsonUtils.parseJSONFile("json_update");
-        System.out.println(js);
+        System.out.println(jsonUtils.updateJson(js, "type","10"));
+
     }
+
 }

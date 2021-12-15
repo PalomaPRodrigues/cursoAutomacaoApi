@@ -12,3 +12,9 @@ Funcionalidade: Criar e editar contas de usuários
     Quando  envio um request de cadastro de usuario com dados validos
     Entao o usuario deve ser criado corretamente
     E o status code do request deve ser 201
+
+  Cenario: Cadastrar novo usuário API Gorest
+    Dado que possou gorest token valido
+    Quando  envio um request de cadastro de usuario com dados validos
+    Entao o usuario deve ser criado corretamente
+    E o status code do request deve ser 201
