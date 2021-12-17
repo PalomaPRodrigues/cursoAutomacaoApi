@@ -2,27 +2,26 @@ package steps;
 
 import api.ApiHeaders;
 import api.ApiRequest;
-import api.ApiUtils;
 import com.github.javafaker.Faker;
 import com.google.gson.Gson;
 import io.cucumber.java.pt.Dado;
 import io.cucumber.java.pt.Entao;
 import io.cucumber.java.pt.Quando;
+import org.json.JSONException;
 import org.json.JSONObject;
-import users.UserConstutor;
-import users.UsersGettersSetters;
-import users.UsersLombok;
-import users.UsersRecord;
+import org.json.XML;
+import users.*;
 import utils.JsonUtils;
 import utils.PropertiesUtils;
 
-import java.io.IOException;
 import java.util.HashMap;
+
 import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 // Classe que indica o passo a passo da automação atráves da escrita do bdd
+// controla  tudo
 public class GorestSteps extends ApiRequest {
 
     //instanciação de classes:
@@ -30,53 +29,39 @@ public class GorestSteps extends ApiRequest {
     JsonUtils jsonUtils = new JsonUtils();
     ApiHeaders apiHeaders = new ApiHeaders();
     Faker faker = new Faker();//biblioteca randomico no pom.xml
-    Map<String, String> jsonValues = new HashMap<>();
-
+    UsersLombok userEnvio;
 
     @Dado("que possou gorest token valido")
     public void que_possou_gorest_token_valido() {
+
         token = prop.getProp("token_gorest");
     }
 
     @Quando("envio um request de cadastro de usuario com dados validos")
-    public void envio_um_request_de_cadastro_de_usuario_com_dados_validos() throws Exception {
+    public void envio_um_request_de_cadastro_de_usuario_com_dados_validos() throws JSONException {
         super.uri = prop.getProp("uri_gorest");
         headers = apiHeaders.gorestHeaders(token);//envia as informação da API
-        super.body = new UsersRecord(faker.internet().emailAddress(),
-                "Female",
-                faker.name().fullName(),
-                "Active").getJson();
-                //super.body = jsonUtils.setJsonValues(jsonUtils.parseJSONFile("create_user"),setJsoValues());
-//        super.body = new Users(faker.internet().emailAddress(),"Female", faker.name().fullName(),"Inactive").getJson();
-//        UsersGettersSetters users = new UsersGettersSetters();
-//        users.setEmail(faker.internet().emailAddress());
-//        users.setStatus("Active");
-//        users.setGender("Female");
-//        users.setName(faker.name().fullName());
-//        super.body = users.getJson();
-//        super.body = new JSONObject(new Gson().toJson(
-//                UsersLombok.builder()
-//                        .email(faker.internet().emailAddress())
-//                        .name(faker.name().fullName())
-//                        .gender("Female")
-//                        .status("Active")
-//                        .build()
-//        ));
+        userEnvio = UsersLombok.builder()
+                .email(faker.internet().emailAddress())
+                .name(faker.name().fullName())
+                .gender("female")
+                .status("active")
+                .build();
+
+        super.body = new JSONObject(new Gson().toJson(userEnvio));
         super.POST();
     }
-    // método para fazer update de varios valores
-//    private Map<String, String> setJsoValues() {
-//        jsonValues.put("email", faker.internet().emailAddress());
-//        jsonValues.put("name", faker.name().fullName());
-//        jsonValues.put("gender", "Female");
-//        jsonValues.put("status", "Inactive");
-//        return  jsonValues;
-//    }
 
     @Entao("o usuario deve ser criado corretamente")
-    public void o_usuario_deve_ser_criado_corretamente() {
-        assertEquals(body.getString("email"), response.jsonPath().get("data.email"));// validaçao(resposta da requisição)
-        assertEquals(body.getString("name"), response.jsonPath().get("data.name"));
+    public void o_usuario_deve_ser_criado_corretamente() throws JSONException {
+        assertEquals(userEnvio, response.jsonPath().getObject("data", UsersLombok.class),
+                "Erro na comparação do objeto.");
+
+        // faz a comparação do que foi enviado e do que está retornando
+        // faz a validação
+        // toLowerCase(), converte tudo para minusculo
+        // validaçao(resposta da requisição);
+//        //assertEquals(body.getString("gender").toLowerCase(), response.jsonPath().get("data.gender"));validaçao(resposta da requisição)
     }
 
     @Entao("o status code do request deve ser {int}") // retorno do staus
@@ -84,4 +69,63 @@ public class GorestSteps extends ApiRequest {
         assertEquals(statusEsperado, response.statusCode(), "Status code diferente do esperado!");
     }
 
+    @Dado("existe um usuario cadastrado no api")
+    public void existe_um_usuario_cadastrado_no_api() {
+        envio_um_request_de_cadastro_de_usuario_com_dados_validos();
+
+    }
+
+    @Quando("buscar esse usuario")
+    public void buscar_esse_usuario() {
+        super.uri = prop.getProp("uri_gorest") + "/" + response.jsonPath().getJsonObject("data.id");
+        super.headers = apiHeaders.gorestHeaders(token);
+        super.body = new JSONObject();
+        super.GET();
+    }
+
+    @Entao("os dados dos usuario devem ser retornados")
+    public void os_dados_dos_usuario_devem_ser_retornados() {
+        assertEquals(userEnvio, response.jsonPath().getObject("data", UsersLombok.class),
+                "Erro na comparação do objeto.");
+
+    }
+    @Quando("altero os dados do usuario")
+    public void altero_os_dados_do_usuario() {
+        super.uri = prop.getProp("uri_gorest") + "/" + response.jsonPath().getJsonObject("data.id");
+        super.headers = apiHeaders.gorestHeaders(token);
+        userEnvio.setStatus("inactive");
+        super.body = new JSONObject(new Gson().toJson(userEnvio));
+        super.PUT();
+
+    }
+    @Entao("o usuario deve ser alterado com sucesso")
+    public void o_usuario_deve_ser_alterado_com_sucesso() {
+        assertEquals(userEnvio, response.jsonPath().getObject("data", UsersLombok.class),
+                "Erro na comparação do objeto.");
+
+    }
+
+
+    @Quando("altero  um ou mais dados do usuario")
+    public void alteroUmOuMaisDadosDoUsuario() {
+        super.uri = prop.getProp("uri_gorest") + "/" + response.jsonPath().getJsonObject("data.id");
+        super.headers = apiHeaders.gorestHeaders(token);
+        userEnvio.setGender("male");
+        super.body = new JSONObject("{\"gender\": \"male\"}");
+        super.PATCH();
+    }
+
+    @Quando("delete esse usuario")
+    public void delete_esse_usuario() {
+        super.uri = prop.getProp("uri_gorest") + "/" + response.jsonPath().getJsonObject("data.id");
+        super.headers = apiHeaders.gorestHeaders(token);
+        super.body = new JSONObject();
+        super.DELETE();
+    }
+
+    @Entao("o usuario é deletado corretamente")
+    public void o_usuario_é_deletado_corretamente() {
+        assertEquals("",response.asString());
+
+    }
 }

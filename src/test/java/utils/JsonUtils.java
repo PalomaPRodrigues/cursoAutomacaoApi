@@ -11,6 +11,7 @@ import java.util.Iterator;
 import java.util.Map;
 
 // Classe que irá indicar o caminho e leitura do Json
+// Class JsonUtil, serve para recuperar um json ou fazer o udpate
 public class JsonUtils {
     // metodo que recebe o caminho que está o Json .o readAllBytes
     public JSONObject parseJSONFile(String json) throws IOException, JSONException {

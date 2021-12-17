@@ -7,7 +7,7 @@ import java.util.Properties;
 public class PropertiesUtils {
 
     Properties properties = new Properties();
-
+    //Recupera arquibvos de propriedades e  seta as configurações do projeto ( usuario, senha e etc)
     // String é o retorno do valor e key é o valor.
     public String getProp(String key) {
         try {

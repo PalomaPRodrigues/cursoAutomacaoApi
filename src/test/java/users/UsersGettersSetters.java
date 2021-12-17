@@ -2,8 +2,9 @@ package users;
 
 import com.google.gson.Gson;
 import org.json.JSONObject;
+import org.json.XML;
 
-
+// Gera json e XML
 public class UsersGettersSetters {
     // atributos da class
     private String email;
@@ -46,5 +47,8 @@ public class UsersGettersSetters {
     // converte o objeto do tipo class para obejto do tipo json
     public JSONObject getJson() {
         return new JSONObject(new Gson().toJson(this));
+    }
+    // converte o objeto do tipo json para objeto do tipo xml
+    public String getXml(){return XML.toString(getJson());
     }
 }

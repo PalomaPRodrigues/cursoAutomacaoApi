@@ -6,14 +6,14 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class ScenarioUtils {
-
+// responsável para controlar os scenarios
     private static Map<Long, Scenario> repository = new HashMap<>();
-
+//adiociona scenario
     public static void add(Scenario scenario) {
         if (get() == null)
             repository.put(getId(), scenario);
     }
-
+// remove scenario
     public static void remove() {
         if (get() != null)
             repository.remove(getId());
@@ -23,13 +23,7 @@ public class ScenarioUtils {
         return repository.get(getId());
     }
 
-    public static Long getId() {
-        return Thread.currentThread().getId();
-    }
-
-    public static void addText(String texto) {
-        get().log(texto);
-    }
-
-
+    public static Long getId() {return Thread.currentThread().getId();}
+//adiciona e recebe texto
+    public static void addText(String texto) {get().log(texto);}
 }
