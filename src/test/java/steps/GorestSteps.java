@@ -40,7 +40,7 @@ public class GorestSteps extends ApiRequest {
     @Quando("envio um request de cadastro de usuario com dados validos")
     public void envio_um_request_de_cadastro_de_usuario_com_dados_validos() throws JSONException {
         super.uri = prop.getProp("uri_gorest");
-        headers = apiHeaders.gorestHeaders(token);//envia as informação da API
+        super.headers = apiHeaders.gorestHeaders(token);//envia as informação da API
         userEnvio = UsersLombok.builder()
                 .email(faker.internet().emailAddress())
                 .name(faker.name().fullName())
@@ -102,7 +102,6 @@ public class GorestSteps extends ApiRequest {
     public void o_usuario_deve_ser_alterado_com_sucesso() {
         assertEquals(userEnvio, response.jsonPath().getObject("data", UsersLombok.class),
                 "Erro na comparação do objeto.");
-
     }
 
 

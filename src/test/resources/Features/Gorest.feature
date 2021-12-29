@@ -3,7 +3,7 @@
 #Version: 1.0
 #Encoding: UTF-8
 
-@Gorest
+@Gorest @regressivo
 Funcionalidade: Criar e editar contas de usuários
   Eu como Administrador do sistema, quero cadastrar e editar usuarios do sistema
 @post

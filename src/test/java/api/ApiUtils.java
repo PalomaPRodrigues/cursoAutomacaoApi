@@ -20,13 +20,13 @@ public class ApiUtils extends LogUtils {
     protected static String token;
 
     public void log(String verbo) {
-
+// faz request
         super.logInfo(" ******* Dados enviados no request *******");
         super.logInfo(verbo + "" + uri);
         super.logInfo("Body : \n" + body);
         super.logInfo("Headers : " + headers);
         super.logInfo(" Params :" + params);
-
+//payload
         super.logInfo(" ******* Dados enviados no request *******");
         super.logInfo("Status code: " + response.statusCode());
         super.logInfo("Payload recebido : \n" + response.asPrettyString());

@@ -14,7 +14,7 @@ public class ApiRequest extends ApiUtils implements ApiVerbos {
                 .params(params)
                 .headers(headers)
                 .get(uri);
-        super.log("Get");
+        super.log("GET");
     }
 
     @Override
